@@ -1,0 +1,14 @@
+# GNSS
+vendor_internal_prop(vendor_gnss_psds_prop)
+
+# NFC
+vendor_internal_prop(vendor_sec_nfc_prop)
+
+# Secure Element
+vendor_internal_prop(vendor_sehal_prop)
+
+# Tee
+vendor_internal_prop(vendor_qseecomd_prop)
+
+# Power HAL
+vendor_public_prop(vendor_power_prop)

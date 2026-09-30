@@ -1,0 +1,5 @@
+libOpenCL.so
+libadsprpc.so
+libcdsprpc.so
+libfastcvopt.so
+libsdsprpc.so
