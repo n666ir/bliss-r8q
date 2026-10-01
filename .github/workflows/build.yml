@@ -1,0 +1,67 @@
+name: Build BlissOS r8q
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout r8q tree
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            git-core \
+            repo \
+            bc \
+            bison \
+            build-essential \
+            curl \
+            flex \
+            gperf \
+            libxml2-utils \
+            lz4 \
+            libssl-dev \
+            pngcrush \
+            rsync \
+            unzip \
+            zip
+
+      - name: Initialize Bliss Waterlily
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/bliss"
+          cd "$GITHUB_WORKSPACE/bliss"
+          repo init \
+            -u https://github.com/BlissRoms/manifest.git \
+            -b waterlily \
+            --depth=1
+
+      - name: Sync Bliss source
+        run: |
+          cd "$GITHUB_WORKSPACE/bliss"
+          repo sync \
+            --force-sync \
+            --no-clone-bundle \
+            --no-tags \
+            -j$(nproc)
+
+      - name: Inject r8q device tree
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p bliss/device/samsung
+          mkdir -p bliss/vendor/samsung
+          rsync -a device/samsung/r8q bliss/device/samsung/
+          rsync -a device/samsung/sm8250-common bliss/device/samsung/
+          rsync -a vendor/samsung/r8q bliss/vendor/samsung/
+          rsync -a vendor/samsung/sm8250-common bliss/vendor/samsung/
+
+      - name: Check injected tree
+        run: |
+          test -f bliss/device/samsung/r8q/BoardConfig.mk
+          test -f bliss/device/samsung/r8q/bliss_r8q.mk
+          test -d bliss/vendor/samsung/r8q/proprietary
+          echo "r8q device/vendor tree OK"
