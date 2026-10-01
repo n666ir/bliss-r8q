@@ -40,6 +40,11 @@ jobs:
             -b waterlily \
             --git-lfs
 
+      - name: Configure GitHub HTTPS
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
       - name: Sync Bliss source
         run: |
           cd "$GITHUB_WORKSPACE/bliss"
