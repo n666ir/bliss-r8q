@@ -36,9 +36,9 @@ jobs:
           mkdir -p "$GITHUB_WORKSPACE/bliss"
           cd "$GITHUB_WORKSPACE/bliss"
           repo init \
-            -u https://github.com/BlissRoms/manifest.git \
+            -u https://github.com/BlissRoms/stable_releases.git \
             -b waterlily \
-            --depth=1
+            --git-lfs
 
       - name: Sync Bliss source
         run: |
